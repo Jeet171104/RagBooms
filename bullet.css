@@ -1,0 +1,21 @@
+#bullet1 {
+    height: 5px;
+    width: 15px;
+    border-radius: 10%;
+    background-color: red;
+    position: absolute;
+}
+#bullet2 {
+    height: 5px;
+    width: 30px;
+    border-radius: 10%;
+    background-color: red;
+    position: absolute;
+}
+#bullet3 {
+    height: 5px;
+    width: 15px;
+    border-radius: 10%;
+    background-color: red;
+    position: absolute;
+}

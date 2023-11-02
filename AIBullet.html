@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100px;
+            overflow: hidden;
+        }
+
+        .bullet {
+            position: absolute;
+            width: 20px;
+            height: 10px;
+            background-color: red;
+            top: 45px;
+            left: -20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="container"></div>
+
+    <script>
+        function createBullet() {
+            const container = document.getElementById("container");
+            const bullet = document.createElement("div");
+            bullet.className = "bullet";
+            container.appendChild(bullet);
+
+            let position = -20;
+            let speed = 5;
+
+            const bulletMove = () => {
+                position += speed;
+                bullet.style.left = position + "px";
+
+                if (position > container.clientWidth) {
+                    container.removeChild(bullet);
+                } else {
+                    requestAnimationFrame(bulletMove);
+                }
+            };
+
+            bulletMove();
+        }
+
+        setInterval(createBullet, 1000);
+    </script>
+</body>
+</html>

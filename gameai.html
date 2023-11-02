@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const spaceship = {
+            x: canvas.width / 2,
+            y: canvas.height - 50,
+            width: 50,
+            height: 50,
+            speed: 5,
+        };
+
+        let bullets = [];
+        let rocks = [];
+        let score = 0;
+
+        // Event listeners for arrow keys and space bar
+        document.addEventListener("keydown", keyDownHandler);
+        document.addEventListener("keyup", keyUpHandler);
+
+        function keyDownHandler(e) {
+            if (e.key === "Right" || e.key === "ArrowRight") {
+                spaceship.x += spaceship.speed;
+            } else if (e.key === "Left" || e.key === "ArrowLeft") {
+                spaceship.x -= spaceship.speed;
+            } else if (e.key === " ") {
+                fireBullet();
+            }
+        }
+
+        function keyUpHandler(e) {
+            if (e.key === "Right" || e.key === "ArrowRight" || e.key === "Left" || e.key === "ArrowLeft") {
+                spaceship.x += 0;
+            }
+        }
+
+        function drawSpaceship() {
+            ctx.beginPath();
+            ctx.rect(spaceship.x, spaceship.y, spaceship.width, spaceship.height);
+            ctx.fillStyle = "blue";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function fireBullet() {
+            bullets.push({ x: spaceship.x + spaceship.width / 2, y: spaceship.y, width: 5, height: 10, speed: 5 });
+        }
+
+        function drawBullets() {
+            bullets.forEach((bullet, index) => {
+                ctx.beginPath();
+                ctx.rect(bullet.x, bullet.y, bullet.width, bullet.height);
+                ctx.fillStyle = "red";
+                ctx.fill();
+                ctx.closePath();
+
+                bullet.y -= bullet.speed;
+
+                if (bullet.y < 0) {
+                    bullets.splice(index, 1);
+                }
+            });
+        }
+
+        function createRock() {
+            const rock = {
+                x: Math.random() * (canvas.width - 50),
+                y: 0,
+                width: 50,
+                height: 50,
+                speed: 2,
+            };
+            rocks.push(rock);
+        }
+
+        function drawRocks() {
+            rocks.forEach((rock, index) => {
+                ctx.beginPath();
+                ctx.rect(rock.x, rock.y, rock.width, rock.height);
+                ctx.fillStyle = "gray";
+                ctx.fill();
+                ctx.closePath();
+
+                rock.y += rock.speed;
+
+                if (rock.y > canvas.height) {
+                    rocks.splice(index, 1);
+                }
+
+                if (collisionDetection(rock, spaceship)) {
+                    alert("Game Over! Your score: " + score);
+                    document.location.reload();
+                }
+            });
+        }
+
+        function collisionDetection(obj1, obj2) {
+            return (
+                obj1.x < obj2.x + obj2.width &&
+                obj1.x + obj1.width > obj2.x &&
+                obj1.y < obj2.y + obj2.height &&
+                obj1.y + obj1.height > obj2.y
+            );
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            drawSpaceship();
+            drawBullets();
+            drawRocks();
+
+            if (Math.random() < 0.02) {
+                createRock();
+            }
+
+            bullets.forEach((bullet, bIndex) => {
+                rocks.forEach((rock, rIndex) => {
+                    if (collisionDetection(bullet, rock)) {
+                        bullets.splice(bIndex, 1);
+                        rocks.splice(rIndex, 1);
+                        score += 10;
+                    }
+                });
+            });
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>

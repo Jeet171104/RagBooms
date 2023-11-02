@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  #circle {
+    width:80px;
+    height: 80px;
+    background-color: rgb(199, 33, 33);
+    border-radius: 50%;
+animation: bounce 1s infinite;
+    position: absolute;
+  }
+</style>
+</head>
+<body>
+<div id="circle"></div>
+<div id="circle"></div>
+
+<script>
+  const circle = document.getElementById("circle");
+  let circleX = 100;
+  let circleY = 0;
+  const moveDistance = 10; //just variable stored
+
+  document.addEventListener("keydown", (event) => { //addEventListener is used to use keys in web
+    switch (event.key) {
+      case " ": //Mentioned the keys
+      circleX = circleX+moveDistance; 
+      break;
+    
+    }
+    
+    circleX+= 25;
+    circle.style.left = circleX + "px";
+    circle.style.top = circleY + "px";
+  });
+</script>
+
+
+</body>
+</html>
